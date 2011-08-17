@@ -1,0 +1,124 @@
+NAME
+    Pinto::Server - Web interface to a Pinto repository
+
+VERSION
+    version 0.001
+
+DESCRIPTION
+    You probably want to look at pinto-server first.
+
+    Pinto::Server is a web API to a Pinto repository. Using this interface,
+    remote clients (like pinto-remote) can add distributions, remove
+    packages, and list the contents of the Pinto repository. In addition,
+    Pinto::Server serves the entire contents of your repository, so you can
+    use it as the source of distributions for cpan or cpanm.
+
+    Before running Pinto::Server you must first create a Pinto repository.
+    See pinto-admin for directions on that. Once you have a repository, the
+    easiest way to run Pinto::Server is like this:
+
+      $> pinto-server [OPTIONS]
+
+    Pinto::Server is also PSGI compatible, so you can run it under Plack
+    like this:
+
+      $> plackup [OPTIONS] /path/to/pinto-server
+
+CONFIGURATION
+    Pinto::Server automatically uses your Pinto configuration file which is
+    usually at $HOME/.pinto/config.ini. Or you can set the "PERL_PINTO"
+    environment variable to point to another location.
+
+    No additional configuration is required beyond what Pinto itself uses.
+    However, Pinto::Server will always silently force the "nocommit" and
+    "noinit" parameters to 0. Also, the "author" parameter is meaningless to
+    Pinto::Server because clients all required to provide an author for any
+    "add" or "remove" operations.
+
+CAVEATS
+    If you are running Pinto::Server and have configured Pinto to use a
+    VCS-based store, such as Pinto::Store::Svn or Pinto::Store::Git, then
+    you must not mess with the VCS directly (at least not the VCS
+    directories that Pinto is using). This is because Pinto::Server only
+    initializes the working copy of the Pinto repository at startup.
+    Thereafter, it assumes that it is the only actor that affects its part
+    of the VCS. If you start
+
+LIMITATIONS
+    Pinto::Server speaks HTTP, but does not actually serve HTML. At the
+    moment, is geared toward command-line tools like pinto-client so it just
+    returns plain text. This will probably change as Pinto::Server evolves
+    into a real web application.
+
+SUPPORT
+  Perldoc
+    You can find documentation for this module with the perldoc command.
+
+      perldoc Pinto::Server
+
+  Websites
+    The following websites have more information about this module, and may
+    be of help to you. As always, in addition to those websites please use
+    your favorite search engine to discover more resources.
+
+    *   Search CPAN
+
+        The default CPAN search engine, useful to view POD in HTML format.
+
+        <http://search.cpan.org/dist/Pinto-Server>
+
+    *   RT: CPAN's Bug Tracker
+
+        The RT ( Request Tracker ) website is the default bug/issue tracking
+        system for CPAN.
+
+        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pinto-Server>
+
+    *   CPAN Ratings
+
+        The CPAN Ratings is a website that allows community ratings and
+        reviews of Perl modules.
+
+        <http://cpanratings.perl.org/d/Pinto-Server>
+
+    *   CPAN Testers
+
+        The CPAN Testers is a network of smokers who run automated tests on
+        uploaded CPAN distributions.
+
+        <http://www.cpantesters.org/distro/P/Pinto-Server>
+
+    *   CPAN Testers Matrix
+
+        The CPAN Testers Matrix is a website that provides a visual way to
+        determine what Perls/platforms PASSed for a distribution.
+
+        <http://matrix.cpantesters.org/?dist=Pinto-Server>
+
+    *   CPAN Testers Dependencies
+
+        The CPAN Testers Dependencies is a website that shows a chart of the
+        test results of all dependencies for a distribution.
+
+        <http://deps.cpantesters.org/?module=Pinto::Server>
+
+  Bugs / Feature Requests
+    Please report any bugs or feature requests by email to "bug-pinto-server
+    at rt.cpan.org", or through the web interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Pinto-Server>. You will
+    be automatically notified of any progress on the request by the system.
+
+  Source Code
+    <https://github.com/thaljef/Pinto-Server>
+
+      git clone https://github.com/thaljef/Pinto-Server
+
+AUTHOR
+    Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2011 by Imaginative Software Systems.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
