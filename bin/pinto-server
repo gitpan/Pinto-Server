@@ -6,20 +6,118 @@
 use strict;
 use warnings;
 
-#-----------------------------------------------------------------------------
+use Pod::Usage;
+use Getopt::Long;
+use Path::Class;
+use File::Temp;
+use Pinto 0.017;
 
-our $VERSION = '0.001'; # VERSION
-
-#-----------------------------------------------------------------------------
-
-use Pinto::Server;
-use Dancer::GetOpt;
-use Dancer;
-
-Dancer::GetOpt->process_args();
-Dancer::dance;
+use Dancer ':syntax';
 
 #-----------------------------------------------------------------------------
+
+our $VERSION = '0.017'; # VERSION
+
+#-----------------------------------------------------------------------------
+# Globals
+
+my $PINTO;
+my $REPOS;
+
+#----------------------------------------------------------------------------
+# Dancer routes
+
+post '/action/add' => sub {
+
+    my $author = param('author')
+      or (status 500 and return 'No author supplied');
+
+    my $dist   = upload('dist')
+      or (status 500 and return 'No dist file supplied');
+
+    my $tempdir = dir( File::Temp::tempdir(CLEANUP=>1) );
+    my $dist_file = $tempdir->file( $dist->basename() );
+    $dist->copy_to( $dist_file );
+
+    $PINTO->new_action_batch();
+    $PINTO->add_action('Add', dist => $dist_file, author => $author);
+    my $result = $PINTO->run_actions();
+
+    status 200 and return if $result->is_success();
+    status 500 and return join "\n", map {"$_"} $result->exceptions();
+
+};
+
+#----------------------------------------------------------------------------
+
+post '/action/remove' => sub {
+
+    my $author  = param('author')
+      or (status 500 and return 'No author supplied');
+
+    my $package = param('package')
+      or ( status 500 and return 'No package supplied');
+
+    $PINTO->new_action_batch();
+    $PINTO->add_action('Remove', package => $package, author => $author);
+    my $result = $PINTO->run_actions();
+
+    status 200 and return if $result->is_success();
+    status 500 and return join "\n", map {"$_"} $result->exceptions();
+};
+
+#----------------------------------------------------------------------------
+
+post '/action/list' => sub {
+
+    my $buffer = '';
+    my $type = ucfirst param('type') || 'All';
+
+    $PINTO->new_action_batch();
+    $PINTO->add_action("List::$type", out => \$buffer);
+    my $result = $PINTO->run_actions();
+
+    status 200 and return $buffer if $result->is_success();
+    status 500 and return join "\n", map {"$_"} $result->exceptions();
+};
+
+#----------------------------------------------------------------------------
+
+get qr{^ /(authors|modules)/(.+) }x => sub {
+     my $file =  file( $REPOS, request->uri() );
+     status 404 and return 'Not found' if not -e $file;
+     return send_file( $file, system_path => 1 );
+};
+
+#----------------------------------------------------------------------------
+# Ping route
+
+get '/' => sub {
+    status 200;
+    return 'Pinto OK';
+};
+
+#-----------------------------------------------------------------------------
+# Fallback route
+
+any qr{ .* }x => sub {
+    status 404;
+    return 'Not found';
+};
+
+#-----------------------------------------------------------------------------
+# Main
+
+GetOptions( 'daemon'  => sub { setting(@_) },
+            'port=i'  => sub { setting(@_) },
+            'repos=s' => \$REPOS ) or pod2usage();
+
+pod2usage(-message => 'Must specify a repository') if not $REPOS;
+$PINTO  = Pinto->new(repos => $REPOS, quiet => 1);
+
+Dancer::dance();
+
+#----------------------------------------------------------------------------
 
 
 
@@ -33,34 +131,76 @@ pinto-server - provide a web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.001
+version 0.017
 
 =head1 SYNOPSIS
 
-First, create a config file at F<~/.pinto/config.ini>:
-
-  # Required.  This is where your repository will live
-  local = /some/directory
-
-Then start L<pinto-server> (assume the host name is 'tatooine'):
-
-   $> pinto-server
-
-Then use L<pinto-remote> to put some stuff in your repository
-
-   $> pinto-remote --host=http://tatooine:5000 add Foo-Bar.tar.gz
-
-Finally, use L<cpanm> to install stuff from your repository
-
-  $> cpanm --mirror=http://tatooine:5000 Foo::Bar
+  pinto-server --repos=/path/to/repository [--daemon] [--port=N]
 
 =head1 DESCRIPTION
 
-L<pinto-server> is the utility program for starting the
-L<Pinto::Server>.  At the moment, L<pinto-server> is based on
-L<Dancer>, so it supports whatever command-line switches that
-L<Dancer::GetOpt> provides.  Say C<pinto-server --help> to get a
-listing of the available options.
+Before running L<pinto-server> you must first create a Pinto
+repository.  See L<pinto-admin> for instructions on that.
+
+L<pinto-server> provides a web API to a L<Pinto> repository.  Remote
+clients (like L<pinto-remote>) can use this API to add distributions,
+remove packages, and list the contents of the Pinto repository.  In
+addition, L<pinto-server> exposes the contents of your repository, so
+you can use it as the source of distributions for L<cpan> or L<cpanm>.
+
+=head1 ARGUMENTS
+
+=over 4
+
+=item --repos=PATH
+
+The path to the Pinto repository you wish to serve.
+
+=back
+
+=head1 OPTIONS
+
+=over 4
+
+=item --daemon
+
+Tells L<pinto-server> to fork and run in a separate process.
+
+=item --port=N
+
+Sets the port number for the server to listen on.  Default is 3000.
+
+=back
+
+=head1 DEPLOYMENT
+
+L<pinto-server> can be run as a stand-alone server as shown in the
+L</"SYNOPSIS">.  However, this may not perform well under heavy load.
+
+L<pinto-server> is also PSGI compatible, so if you need a more
+powerful robust server, you can run it under L<Plack> like this:
+
+  $> plackup [OPTIONS] /path/to/pinto-server
+
+=head1 CAVEATS
+
+If you are running L<pinto-server> and have configured L<Pinto> to use
+a VCS-based store, such as L<Pinto::Store::VCS::Svn> or
+L<Pinto::Store::VCS::Git>, then you must not mess with the VCS
+directly (at least not the part of the VCS that holds the Pinto
+repository).  This is because L<pinto-server> only initializes the
+working copy of the repository at startup.  Thereafter, it assumes
+that it is the only actor affecting the Pinto repository in the VCS.
+If you start modifying Pinto's area of the VCS directly, then the
+working copy for L<pinto-server> will become out of date and conflicts
+will happen.
+
+=head1 LIMITATIONS
+
+L<pinto-server> speaks HTTP, but does not actually serve HTML.  At the
+moment, it is geared toward command line tools like L<pinto-remote> so
+it just returns plain text.  This will probably change as
+L<pinto-server> evolves into a real web application.
 
 =head1 AUTHOR
 

@@ -19,21 +19,18 @@ my %module_build_args = (
     'Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>'
   ],
   'dist_name' => 'Pinto-Server',
-  'dist_version' => '0.001',
+  'dist_version' => '0.017',
   'license' => 'perl',
   'module_name' => 'Pinto::Server',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
-    'Carp' => '0',
     'Dancer' => '0',
-    'Dancer::GetOpt' => '0',
-    'Data::Dumper' => '0',
     'File::Temp' => '0',
+    'Getopt::Long' => '0',
     'Path::Class' => '0',
-    'Pinto' => '0',
-    'Pinto::Config' => '0',
-    'Pinto::Logger' => '0',
+    'Pinto' => '0.017',
+    'Pod::Usage' => '0',
     'perl' => '5.006'
   },
   'script_files' => [

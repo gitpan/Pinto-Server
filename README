@@ -2,53 +2,16 @@ NAME
     Pinto::Server - Web interface to a Pinto repository
 
 VERSION
-    version 0.001
+    version 0.017
 
 DESCRIPTION
-    You probably want to look at pinto-server first.
+    There is nothing to see here.
 
-    Pinto::Server is a web API to a Pinto repository. Using this interface,
-    remote clients (like pinto-remote) can add distributions, remove
-    packages, and list the contents of the Pinto repository. In addition,
-    Pinto::Server serves the entire contents of your repository, so you can
-    use it as the source of distributions for cpan or cpanm.
+    Look at pinto-server instead.
 
-    Before running Pinto::Server you must first create a Pinto repository.
-    See pinto-admin for directions on that. Once you have a repository, the
-    easiest way to run Pinto::Server is like this:
+    Then you'll probably want to look at pinto-remote.
 
-      $> pinto-server [OPTIONS]
-
-    Pinto::Server is also PSGI compatible, so you can run it under Plack
-    like this:
-
-      $> plackup [OPTIONS] /path/to/pinto-server
-
-CONFIGURATION
-    Pinto::Server automatically uses your Pinto configuration file which is
-    usually at $HOME/.pinto/config.ini. Or you can set the "PERL_PINTO"
-    environment variable to point to another location.
-
-    No additional configuration is required beyond what Pinto itself uses.
-    However, Pinto::Server will always silently force the "nocommit" and
-    "noinit" parameters to 0. Also, the "author" parameter is meaningless to
-    Pinto::Server because clients all required to provide an author for any
-    "add" or "remove" operations.
-
-CAVEATS
-    If you are running Pinto::Server and have configured Pinto to use a
-    VCS-based store, such as Pinto::Store::Svn or Pinto::Store::Git, then
-    you must not mess with the VCS directly (at least not the VCS
-    directories that Pinto is using). This is because Pinto::Server only
-    initializes the working copy of the Pinto repository at startup.
-    Thereafter, it assumes that it is the only actor that affects its part
-    of the VCS. If you start
-
-LIMITATIONS
-    Pinto::Server speaks HTTP, but does not actually serve HTML. At the
-    moment, is geared toward command-line tools like pinto-client so it just
-    returns plain text. This will probably change as Pinto::Server evolves
-    into a real web application.
+    See Pinto::Manual for a complete guide.
 
 SUPPORT
   Perldoc

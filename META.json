@@ -34,15 +34,12 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : 0,
             "Dancer" : 0,
-            "Dancer::GetOpt" : 0,
-            "Data::Dumper" : 0,
             "File::Temp" : 0,
+            "Getopt::Long" : 0,
             "Path::Class" : 0,
-            "Pinto" : 0,
-            "Pinto::Config" : 0,
-            "Pinto::Logger" : 0,
+            "Pinto" : "0.017",
+            "Pod::Usage" : 0,
             "perl" : "5.006"
          }
       },
@@ -56,7 +53,7 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.001"
+         "version" : "0.017"
       }
    },
    "release_status" : "stable",
@@ -68,6 +65,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.001"
+   "version" : "0.017"
 }
 
