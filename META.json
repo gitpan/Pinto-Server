@@ -38,7 +38,7 @@
             "File::Temp" : 0,
             "Getopt::Long" : 0,
             "Path::Class" : 0,
-            "Pinto" : "0.020",
+            "Pinto" : "0.021",
             "Pod::Usage" : 0,
             "perl" : "5.006"
          }
@@ -53,7 +53,7 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.018"
+         "version" : "0.019"
       }
    },
    "release_status" : "stable",
@@ -65,6 +65,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.018"
+   "version" : "0.019"
 }
 

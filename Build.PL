@@ -19,7 +19,7 @@ my %module_build_args = (
     'Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>'
   ],
   'dist_name' => 'Pinto-Server',
-  'dist_version' => '0.018',
+  'dist_version' => '0.019',
   'license' => 'perl',
   'module_name' => 'Pinto::Server',
   'recommends' => {},
@@ -29,7 +29,7 @@ my %module_build_args = (
     'File::Temp' => '0',
     'Getopt::Long' => '0',
     'Path::Class' => '0',
-    'Pinto' => '0.020',
+    'Pinto' => '0.021',
     'Pod::Usage' => '0',
     'perl' => '5.006'
   },
