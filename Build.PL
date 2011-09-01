@@ -7,7 +7,9 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   'build_requires' => {
+    'Dancer::Test' => '0',
     'File::Find' => '0',
+    'FindBin' => '0',
     'Module::Build' => '0.3601',
     'Test::More' => '0'
   },
@@ -19,17 +21,21 @@ my %module_build_args = (
     'Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>'
   ],
   'dist_name' => 'Pinto-Server',
-  'dist_version' => '0.019',
+  'dist_version' => '0.020',
   'license' => 'perl',
   'module_name' => 'Pinto::Server',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
+    'Carp' => '0',
     'Dancer' => '0',
     'File::Temp' => '0',
     'Getopt::Long' => '0',
+    'Moose' => '0',
+    'MooseX::Types::Moose' => '0',
     'Path::Class' => '0',
-    'Pinto' => '0.021',
+    'Pinto' => '0.023',
+    'Pinto::Types' => '0',
     'Pod::Usage' => '0',
     'perl' => '5.006'
   },

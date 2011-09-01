@@ -1,3 +1,11 @@
+0.020     2011-09-01 15:29:40 America/Los_Angeles
+
+    Now requires Pinto 0.23, which has a different interface.
+
+    Refactored internals so they could be tested.
+
+    And then I actually wrote the tests!
+
 0.019     2011-08-30 01:14:43 America/Los_Angeles
 
     Now requires Pinto 0.021, which behaves better in a 

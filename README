@@ -2,7 +2,7 @@ NAME
     Pinto::Server - Web interface to a Pinto repository
 
 VERSION
-    version 0.019
+    version 0.020
 
 DESCRIPTION
     There is nothing to see here.
@@ -12,6 +12,22 @@ DESCRIPTION
     Then you'll probably want to look at pinto-remote.
 
     See Pinto::Manual for a complete guide.
+
+ATTRIBUTES
+  repos
+    The path to your Pinto repository. The repository must already exist at
+    this location. This attribute is required.
+
+  port
+    The port number the server shall listen on. The default is 3000.
+
+  daemon
+    If true, Pinto::Server will fork and run in a separate process. Default
+    is false.
+
+METHODS
+  run()
+    Starts the Pinto::Server. Returns a PSGI-compatible code reference.
 
 SUPPORT
   Perldoc
