@@ -21,7 +21,7 @@ my %module_build_args = (
     'Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>'
   ],
   'dist_name' => 'Pinto-Server',
-  'dist_version' => '0.020',
+  'dist_version' => '0.021',
   'license' => 'perl',
   'module_name' => 'Pinto::Server',
   'recommends' => {},

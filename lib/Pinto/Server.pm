@@ -17,7 +17,7 @@ use Dancer qw(:moose :script);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.020'; # VERSION
+our $VERSION = '0.021'; # VERSION
 
 #-----------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.020
+version 0.021
 
 =head1 DESCRIPTION
 
@@ -207,7 +207,7 @@ progress on the request by the system.
 
 L<https://github.com/thaljef/Pinto-Server>
 
-  git clone https://github.com/thaljef/Pinto-Server
+  git clone git://github.com/thaljef/Pinto-Server.git
 
 =head1 AUTHOR
 

@@ -59,22 +59,24 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.020"
+         "version" : "0.021"
       },
       "Pinto::Server::Routes" : {
          "file" : "lib/Pinto/Server/Routes.pm",
-         "version" : "0.020"
+         "version" : "0.021"
       }
    },
    "release_status" : "stable",
    "resources" : {
-      "homepage" : "https://github.com/thaljef/Pinto-Server",
+      "bugtracker" : {
+         "web" : "https://github.com/thaljef/Pinto-Server/issues"
+      },
       "repository" : {
          "type" : "git",
-         "url" : "https://github.com/thaljef/Pinto-Server",
+         "url" : "git://github.com/thaljef/Pinto-Server.git",
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.020"
+   "version" : "0.021"
 }
 

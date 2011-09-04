@@ -26,10 +26,10 @@ no_index:
 provides:
   Pinto::Server:
     file: lib/Pinto/Server.pm
-    version: 0.020
+    version: 0.021
   Pinto::Server::Routes:
     file: lib/Pinto/Server/Routes.pm
-    version: 0.020
+    version: 0.021
 requires:
   Carp: 0
   Dancer: 0
@@ -43,6 +43,6 @@ requires:
   Pod::Usage: 0
   perl: 5.006
 resources:
-  homepage: https://github.com/thaljef/Pinto-Server
-  repository: https://github.com/thaljef/Pinto-Server
-version: 0.020
+  bugtracker: https://github.com/thaljef/Pinto-Server/issues
+  repository: git://github.com/thaljef/Pinto-Server.git
+version: 0.021

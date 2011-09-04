@@ -11,7 +11,7 @@ use Dancer qw(:syntax);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.020'; # VERSION
+our $VERSION = '0.021'; # VERSION
 
 #-----------------------------------------------------------------------------
 
@@ -88,6 +88,19 @@ post '/action/list' => sub {
 };
 
 #----------------------------------------------------------------------------
+
+post '/action/nop' => sub {
+
+    my $pinto = pinto();
+    $pinto->new_action_batch(noinit => 1);
+    $pinto->add_action('Nop');
+    my $result = $pinto->run_actions();
+
+    status 200 and return if $result->is_success();
+    status 500 and return $result->to_string;
+};
+
+#----------------------------------------------------------------------------
 # Route for indexes and dists
 
 get qr{^ /(authors|modules)/(.+) }x => sub {
@@ -128,7 +141,7 @@ Pinto::Server::Routes - Dancer routes for a Pinto::Server
 
 =head1 VERSION
 
-version 0.020
+version 0.021
 
 =head1 DESCRIPTION
 

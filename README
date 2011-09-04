@@ -2,7 +2,7 @@ NAME
     Pinto::Server - Web interface to a Pinto repository
 
 VERSION
-    version 0.020
+    version 0.021
 
 DESCRIPTION
     There is nothing to see here.
@@ -90,7 +90,7 @@ SUPPORT
   Source Code
     <https://github.com/thaljef/Pinto-Server>
 
-      git clone https://github.com/thaljef/Pinto-Server
+      git clone git://github.com/thaljef/Pinto-Server.git
 
 AUTHOR
     Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
