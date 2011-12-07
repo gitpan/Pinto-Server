@@ -2,7 +2,7 @@ NAME
     Pinto::Server - Web interface to a Pinto repository
 
 VERSION
-    version 0.021
+    version 0.026
 
 DESCRIPTION
     There is nothing to see here.
@@ -46,13 +46,6 @@ SUPPORT
 
         <http://search.cpan.org/dist/Pinto-Server>
 
-    *   RT: CPAN's Bug Tracker
-
-        The RT ( Request Tracker ) website is the default bug/issue tracking
-        system for CPAN.
-
-        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pinto-Server>
-
     *   CPAN Ratings
 
         The CPAN Ratings is a website that allows community ratings and
@@ -82,10 +75,7 @@ SUPPORT
         <http://deps.cpantesters.org/?module=Pinto::Server>
 
   Bugs / Feature Requests
-    Please report any bugs or feature requests by email to "bug-pinto-server
-    at rt.cpan.org", or through the web interface at
-    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Pinto-Server>. You will
-    be automatically notified of any progress on the request by the system.
+    <https://github.com/thaljef/Pinto-Server/issues>
 
   Source Code
     <https://github.com/thaljef/Pinto-Server>

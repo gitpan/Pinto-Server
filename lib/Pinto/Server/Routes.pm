@@ -5,18 +5,19 @@ package Pinto::Server::Routes;                      ## no critic qw(Complexity)
 use strict;
 use warnings;
 
+use Pinto;
 use Path::Class;
 use File::Temp;
 use Dancer qw(:syntax);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.021'; # VERSION
+our $VERSION = '0.026'; # VERSION
 
 #-----------------------------------------------------------------------------
 
 
-sub pinto { return Pinto->new(repos => setting('repos'), quiet => 1) }
+sub pinto { return Pinto->new(root_dir => setting('repos'), quiet => 1) }
 
 #----------------------------------------------------------------------------
 
@@ -25,22 +26,22 @@ post '/action/add' => sub {
     my $author = param('author')
       or (status 500 and return 'No author supplied');
 
-    my $dist_file   = upload('dist_file')
-      or (status 500 and return 'No dist_file supplied');
+    my $archive   = upload('archive')
+      or (status 500 and return 'No archive supplied');
 
     # Must protect against passing an undef argument, or Moose will bitch
     my %batch_args = ( param('message') ? (message => param('message')) : (),
                        param('tag')     ? (tag     => param('tag'))     : () );
 
-    # TODO: if $dist is a url, don't copy.
-    # Just pass it through and let Pinto fetch it for us.
+    # TODO: if $archive is a url, don't copy.  Just
+    # pass it through and let Pinto fetch it for us.
     my $tempdir = dir( File::Temp::tempdir(CLEANUP=>1) );
-    my $temp_dist_file = $tempdir->file( $dist_file->basename() );
-    $dist_file->copy_to( $temp_dist_file );
+    my $temp_archive = $tempdir->file( $archive->basename() );
+    $archive->copy_to( $temp_archive );
 
     my $pinto = pinto();
-    $pinto->new_action_batch(noinit => 1, %batch_args);
-    $pinto->add_action('Add', dist_file => $temp_dist_file, author => $author);
+    $pinto->new_batch(noinit => 1, %batch_args);
+    $pinto->add_action('Add', archive => $temp_archive, author => $author);
     my $result = $pinto->run_actions();
 
     status 200 and return if $result->is_success();
@@ -55,16 +56,16 @@ post '/action/remove' => sub {
     my $author  = param('author')
       or (status 500 and return 'No author supplied');
 
-    my $dist_name = param('dist_name')
-      or ( status 500 and return 'No dist_name supplied');
+    my $path = param('path')
+      or ( status 500 and return 'No path supplied');
 
     # Must protect against passing an undef argument, or Moose will bitch
     my %batch_args = ( param('message') ? (message => param('message')) : (),
                        param('tag')     ? (tag     => param('tag'))     : () );
 
     my $pinto = pinto();
-    $pinto->new_action_batch(noinit => 1, %batch_args);
-    $pinto->add_action('Remove', dist_name => $dist_name, author => $author);
+    $pinto->new_batch(noinit => 1, %batch_args);
+    $pinto->add_action('Remove', path => $path, author => $author);
     my $result = $pinto->run_actions();
 
     status 200 and return if $result->is_success();
@@ -76,11 +77,12 @@ post '/action/remove' => sub {
 post '/action/list' => sub {
 
     my $buffer = '';
-    my $type = ucfirst param('type') || 'All';
+    my $format = param('format');
+    my @format = $format ? (format => $format) : ();
 
     my $pinto = pinto();
-    $pinto->new_action_batch(noinit => 1);
-    $pinto->add_action("List::$type", out => \$buffer);
+    $pinto->new_batch(noinit => 1);
+    $pinto->add_action('List', @format, out => \$buffer);
     my $result = $pinto->run_actions();
 
     status 200 and return $buffer if $result->is_success();
@@ -92,7 +94,7 @@ post '/action/list' => sub {
 post '/action/nop' => sub {
 
     my $pinto = pinto();
-    $pinto->new_action_batch(noinit => 1);
+    $pinto->new_batch(noinit => 1);
     $pinto->add_action('Nop');
     my $result = $pinto->run_actions();
 
@@ -141,7 +143,7 @@ Pinto::Server::Routes - Dancer routes for a Pinto::Server
 
 =head1 VERSION
 
-version 0.021
+version 0.026
 
 =head1 DESCRIPTION
 

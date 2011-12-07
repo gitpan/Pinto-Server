@@ -3,21 +3,20 @@ package Pinto::Server;
 # ABSTRACT: Web interface to a Pinto repository
 
 use Moose;
+use MooseX::Types::Moose qw(Int Bool);
 
-use Carp;
 use Path::Class;
 use File::Temp;
 
-use Pinto 0.023;
-
+use Pinto;
 use Pinto::Types qw(Dir);
-use MooseX::Types::Moose qw(Int Bool);
 use Pinto::Server::Routes;
+
 use Dancer qw(:moose :script);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.021'; # VERSION
+our $VERSION = '0.026'; # VERSION
 
 #-----------------------------------------------------------------------------
 
@@ -56,8 +55,6 @@ sub run {
     Dancer::set( repos  => $self->repos()  );
     Dancer::set( port   => $self->port()   );
     Dancer::set( daemon => $self->daemon() );
-    Dancer::set( logger => 'console'       );
-    Dancer::set( log    => 'debug'         );
 
     $self->_initialize();
     return Dancer::dance();
@@ -68,12 +65,19 @@ sub run {
 sub _initialize {
     my ($self) = @_;
 
-    print 'Initializing pinto ... ';
-    my $pinto = Pinto::Server::Routes::pinto();
-    $pinto->new_action_batch(noinit => 0);
+    ## no critic qw(Carping)
+
+    my $repos = $self->repos();
+    print "Initializing pinto at '$repos' ... ";
+    my $pinto = eval { Pinto::Server::Routes::pinto() };
+    print "\n" and die "$@" if not $pinto;
+
+    $pinto->new_batch(noinit => 0);
     $pinto->add_action('Nop');
+
     my $result = $pinto->run_actions();
-    die "\n" . $result->to_string() . "\n" if not $result->is_success();
+    print "\n" and die $result->to_string() . "\n" if not $result->is_success();
+
     print "Done\n";
 
     return $self;
@@ -97,7 +101,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.021
+version 0.026
 
 =head1 DESCRIPTION
 
@@ -156,14 +160,6 @@ L<http://search.cpan.org/dist/Pinto-Server>
 
 =item *
 
-RT: CPAN's Bug Tracker
-
-The RT ( Request Tracker ) website is the default bug/issue tracking system for CPAN.
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pinto-Server>
-
-=item *
-
 CPAN Ratings
 
 The CPAN Ratings is a website that allows community ratings and reviews of Perl modules.
@@ -198,9 +194,7 @@ L<http://deps.cpantesters.org/?module=Pinto::Server>
 
 =head2 Bugs / Feature Requests
 
-Please report any bugs or feature requests by email to C<bug-pinto-server at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Pinto-Server>. You will be automatically notified of any
-progress on the request by the system.
+L<https://github.com/thaljef/Pinto-Server/issues>
 
 =head2 Source Code
 

@@ -13,14 +13,16 @@ use Pinto::Server;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.021'; # VERSION
+our $VERSION = '0.026'; # VERSION
 
 #-----------------------------------------------------------------------------
 
-my %opts;
 my @opt_spec = qw(daemon port=i repos|r=s);
-GetOptions(\%opts, @opt_spec) or pod2usage();
+GetOptions(\my %opts, @opt_spec) or pod2usage();
+
+$opts{repos} ||= $ENV{PINTO_REPOSITORY};
 pod2usage(-message => 'Must specify a repository') if not $opts{repos};
+
 Pinto::Server->new(%opts)->run();
 
 #----------------------------------------------------------------------------
@@ -37,7 +39,7 @@ pinto-server - provide a web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.021
+version 0.026
 
 =head1 SYNOPSIS
 
