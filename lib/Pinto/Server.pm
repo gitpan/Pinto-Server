@@ -16,7 +16,7 @@ use Dancer qw(:moose :script);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.026'; # VERSION
+our $VERSION = '0.028'; # VERSION
 
 #-----------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.026
+version 0.028
 
 =head1 DESCRIPTION
 

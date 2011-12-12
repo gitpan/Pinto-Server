@@ -40,7 +40,7 @@
             "Moose" : "0",
             "MooseX::Types::Moose" : "0",
             "Path::Class" : "0",
-            "Pinto" : "0.026",
+            "Pinto" : "0.028",
             "Pinto::Types" : "0",
             "Pod::Usage" : "0",
             "perl" : "5.006",
@@ -61,11 +61,11 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.026"
+         "version" : "0.028"
       },
       "Pinto::Server::Routes" : {
          "file" : "lib/Pinto/Server/Routes.pm",
-         "version" : "0.026"
+         "version" : "0.028"
       }
    },
    "release_status" : "stable",
@@ -79,6 +79,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.026"
+   "version" : "0.028"
 }
 
