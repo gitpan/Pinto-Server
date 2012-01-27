@@ -16,12 +16,12 @@ use Dancer qw(:moose :script);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.028'; # VERSION
+our $VERSION = '0.029'; # VERSION
 
 #-----------------------------------------------------------------------------
 
 
-has repos => (
+has root => (
     is       => 'ro',
     isa      => Dir,
     coerce   => 1,
@@ -52,7 +52,7 @@ has daemon => (
 sub run {
     my ($self) = @_;
 
-    Dancer::set( repos  => $self->repos()  );
+    Dancer::set( root   => $self->root()  );
     Dancer::set( port   => $self->port()   );
     Dancer::set( daemon => $self->daemon() );
 
@@ -67,8 +67,8 @@ sub _initialize {
 
     ## no critic qw(Carping)
 
-    my $repos = $self->repos();
-    print "Initializing pinto at '$repos' ... ";
+    my $root = $self->root();
+    print "Initializing pinto repository at '$root' ... ";
     my $pinto = eval { Pinto::Server::Routes::pinto() };
     print "\n" and die "$@" if not $pinto;
 
@@ -101,7 +101,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 DESCRIPTION
 
@@ -115,10 +115,11 @@ See L<Pinto::Manual> for a complete guide.
 
 =head1 ATTRIBUTES
 
-=head2 repos
+=head2 root
 
-The path to your Pinto repository.  The repository must already exist
-at this location.  This attribute is required.
+The path to the root directory of your Pinto repository.  The
+repository must already exist at this location.  This attribute is
+required.
 
 =head2 port
 

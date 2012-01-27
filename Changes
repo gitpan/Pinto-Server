@@ -1,3 +1,11 @@
+0.029     2012-01-26 22:25:06 America/Los_Angeles
+
+    The --repos option on pinto-server has been officially
+    renamed to --root.  This is to be consistent with the
+    interfaces of pinto-admin and pinto-remote.  The old
+    --repos option will not be supported for backward
+    compatibility.
+
 0.028     2011-12-12 00:23:45 America/Los_Angeles
 
     Exceptions from Pinto are now trapped and returned in the body of

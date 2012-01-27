@@ -4,7 +4,7 @@
       "Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300003, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "Dist::Zilla version 4.300005, CPAN::Meta::Converter version 2.112150",
    "license" : [
       "perl_5"
    ],
@@ -40,7 +40,7 @@
             "Moose" : "0",
             "MooseX::Types::Moose" : "0",
             "Path::Class" : "0",
-            "Pinto" : "0.028",
+            "Pinto" : "0.030",
             "Pinto::Types" : "0",
             "Pod::Usage" : "0",
             "perl" : "5.006",
@@ -61,11 +61,11 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.028"
+         "version" : "0.029"
       },
       "Pinto::Server::Routes" : {
          "file" : "lib/Pinto/Server/Routes.pm",
-         "version" : "0.028"
+         "version" : "0.029"
       }
    },
    "release_status" : "stable",
@@ -79,6 +79,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.028"
+   "version" : "0.029"
 }
 

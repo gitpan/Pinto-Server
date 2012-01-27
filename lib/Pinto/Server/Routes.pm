@@ -12,12 +12,12 @@ use Dancer qw(:syntax);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.028'; # VERSION
+our $VERSION = '0.029'; # VERSION
 
 #-----------------------------------------------------------------------------
 
 
-sub pinto { return Pinto->new(root_dir => setting('repos'), quiet => 1) }
+sub pinto { return Pinto->new(root => setting('root'), quiet => 1) }
 
 #----------------------------------------------------------------------------
 
@@ -163,7 +163,7 @@ post '/action/statistics' => sub {
 # Route for indexes and dists
 
 get qr{^ /(authors|modules)/(.+) }x => sub {
-     my $file =  file( setting('repos'), request->uri() );
+     my $file =  file( setting('root'), request->uri() );
      status 404 and return "Not found\n" if not -e $file;
      return send_file( $file, system_path => 1 );
 };
@@ -224,7 +224,7 @@ Pinto::Server::Routes - Dancer routes for a Pinto::Server
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 DESCRIPTION
 

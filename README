@@ -2,7 +2,7 @@ NAME
     Pinto::Server - Web interface to a Pinto repository
 
 VERSION
-    version 0.028
+    version 0.029
 
 DESCRIPTION
     There is nothing to see here.
@@ -14,9 +14,9 @@ DESCRIPTION
     See Pinto::Manual for a complete guide.
 
 ATTRIBUTES
-  repos
-    The path to your Pinto repository. The repository must already exist at
-    this location. This attribute is required.
+  root
+    The path to the root directory of your Pinto repository. The repository
+    must already exist at this location. This attribute is required.
 
   port
     The port number the server shall listen on. The default is 3000.
