@@ -5,9 +5,6 @@ package Pinto::Server;
 use Moose;
 use MooseX::Types::Moose qw(Int Bool);
 
-use Path::Class;
-use File::Temp;
-
 use Pinto;
 use Pinto::Types qw(Dir);
 use Pinto::Server::Routes;
@@ -16,7 +13,7 @@ use Dancer qw(:moose :script);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.029'; # VERSION
+our $VERSION = '0.033'; # VERSION
 
 #-----------------------------------------------------------------------------
 
@@ -93,7 +90,7 @@ sub _initialize {
 
 =for :stopwords Jeffrey Ryan Thalhammer Imaginative Software Systems cpan testmatrix url
 annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata
-placeholders
+placeholders metacpan
 
 =head1 NAME
 
@@ -101,7 +98,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.029
+version 0.033
 
 =head1 DESCRIPTION
 
@@ -179,7 +176,7 @@ L<http://www.cpantesters.org/distro/P/Pinto-Server>
 
 CPAN Testers Matrix
 
-The CPAN Testers Matrix is a website that provides a visual way to determine what Perls/platforms PASSed for a distribution.
+The CPAN Testers Matrix is a website that provides a visual overview of the test results for a distribution on various Perls/platforms.
 
 L<http://matrix.cpantesters.org/?dist=Pinto-Server>
 

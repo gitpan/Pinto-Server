@@ -12,7 +12,7 @@ use Dancer qw(:syntax);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.029'; # VERSION
+our $VERSION = '0.033'; # VERSION
 
 #-----------------------------------------------------------------------------
 
@@ -23,21 +23,25 @@ sub pinto { return Pinto->new(root => setting('root'), quiet => 1) }
 
 post '/action/add' => sub {
 
-    my $author = param('author')
-      or (status 500 and return 'No author supplied');
+    my $params = params();
 
-    my $archive = upload('archive')
-      or (status 500 and return 'No archive supplied');
+    status 500 and return 'No author supplied'
+        if not $params->{author};
+
+    status 500 and return 'No archive supplied'
+        if not my $archive = upload('archive');
+
 
     # TODO: if $archive is a url, don't copy.  Just
     # pass it through and let Pinto fetch it for us.
-    my $tempdir = dir( File::Temp::tempdir(CLEANUP=>1) );
-    my $temp_archive = $tempdir->file( $archive->basename() );
+    my $temp_dir = File::Temp->newdir(); # Deleted on DESTROY
+    my $temp_archive = file( $temp_dir, $archive->basename() );
     $archive->copy_to( $temp_archive );
+    $params->{archive} = $temp_archive;
 
     my $pinto = pinto();
     $pinto->new_batch(noinit => 1, _get_batch_args());
-    $pinto->add_action('Add', archive => $temp_archive, author => $author);
+    $pinto->add_action('Add', %{ $params } );
     my $result = eval { $pinto->run_actions() };
 
     status 500 and return $@ if $@;
@@ -50,15 +54,17 @@ post '/action/add' => sub {
 
 post '/action/remove' => sub {
 
-    my $author  = param('author')
-      or (status 500 and return 'No author supplied');
+    my $params = params();
 
-    my $path = param('path')
-      or ( status 500 and return 'No path supplied');
+    status 500 and return 'No author supplied'
+        if not $params->{author};
+
+    status 500 and return 'No path supplied'
+        if not $params->{path};
 
     my $pinto = pinto();
     $pinto->new_batch(noinit => 1, _get_batch_args());
-    $pinto->add_action('Remove', path => $path, author => $author);
+    $pinto->add_action('Remove', %{ $params } );
     my $result = eval { $pinto->run_actions() };
 
     status 500 and return $@ if $@;
@@ -95,9 +101,11 @@ post '/action/list' => sub {
 
 post '/action/nop' => sub {
 
+    my $params = params();
+
     my $pinto = pinto();
     $pinto->new_batch(noinit => 1);
-    $pinto->add_action('Nop');
+    $pinto->add_action('Nop', %{ $params } );
     my $result = eval { $pinto->run_actions() };
 
     status 500 and return $@ if $@;
@@ -109,14 +117,14 @@ post '/action/nop' => sub {
 
 post '/action/pin' => sub {
 
-    my $pkg = param('package')
-      or ( status 500 and return 'No package supplied');
+    my $params = params();
 
-    my $ver = param('version') || 0;
+    status 500 and return 'No package supplied'
+        if not $params->{package};
 
     my $pinto = pinto();
     $pinto->new_batch(noinit => 1, _get_batch_args());
-    $pinto->add_action('Pin', package => $pkg, version => $ver);
+    $pinto->add_action('Pin', %{ $params } );
     my $result = eval { $pinto->run_actions() };
 
     status 500 and return $@ if $@;
@@ -128,12 +136,14 @@ post '/action/pin' => sub {
 
 post '/action/unpin' => sub {
 
-    my $pkg = param('package')
-      or ( status 500 and return 'No package supplied');
+    my $params = params();
+
+    status 500 and return 'No package supplied'
+        if not $params->{package};
 
     my $pinto = pinto();
     $pinto->new_batch(noinit => 1);
-    $pinto->add_action('Unpin', package => $pkg);
+    $pinto->add_action('Unpin', %{ $params } );
     my $result = eval { $pinto->run_actions() };
 
     status 500 and return $@ if $@;
@@ -146,12 +156,12 @@ post '/action/unpin' => sub {
 post '/action/statistics' => sub {
 
     my $buffer = '';
-    my $format = param('format');
-    my @format = $format ? (format => $format) : ();
+    my $params = params();
+    $params->{out} = \$buffer;
 
     my $pinto = pinto();
     $pinto->new_batch(noinit => 1);
-    $pinto->add_action('Statistics', @format, out => \$buffer);
+    $pinto->add_action('Statistics', %{ $params } );
     my $result = eval { $pinto->run_actions() };
 
     status 500 and return $@ if $@;
@@ -224,7 +234,7 @@ Pinto::Server::Routes - Dancer routes for a Pinto::Server
 
 =head1 VERSION
 
-version 0.029
+version 0.033
 
 =head1 DESCRIPTION
 
