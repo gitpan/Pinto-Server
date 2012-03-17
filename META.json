@@ -61,11 +61,11 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.033"
+         "version" : "0.034"
       },
       "Pinto::Server::Routes" : {
          "file" : "lib/Pinto/Server/Routes.pm",
-         "version" : "0.033"
+         "version" : "0.034"
       }
    },
    "release_status" : "stable",
@@ -79,6 +79,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.033"
+   "version" : "0.034"
 }
 

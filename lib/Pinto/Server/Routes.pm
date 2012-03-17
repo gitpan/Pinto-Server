@@ -12,7 +12,7 @@ use Dancer qw(:syntax);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.033'; # VERSION
+our $VERSION = '0.034'; # VERSION
 
 #-----------------------------------------------------------------------------
 
@@ -234,7 +234,7 @@ Pinto::Server::Routes - Dancer routes for a Pinto::Server
 
 =head1 VERSION
 
-version 0.033
+version 0.034
 
 =head1 DESCRIPTION
 

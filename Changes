@@ -1,3 +1,9 @@
+0.034     2012-03-17 08:47:01 America/Los_Angeles
+
+    Bug Fixes:
+
+    pinto-server had a broken shebang.
+
 0.033     2012-03-17 00:59:47 America/Los_Angeles
 
     Support the --norecurse option in the add command (Karen
