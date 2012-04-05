@@ -4,7 +4,7 @@
       "Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300009, CPAN::Meta::Converter version 2.113640",
+   "generated_by" : "Dist::Zilla version 4.300010, CPAN::Meta::Converter version 2.120630",
    "license" : [
       "perl_5"
    ],
@@ -34,38 +34,73 @@
       },
       "runtime" : {
          "requires" : {
-            "Dancer" : 0,
-            "File::Temp" : 0,
-            "Getopt::Long" : 0,
-            "Moose" : 0,
-            "MooseX::Types::Moose" : 0,
-            "Path::Class" : 0,
+            "Carp" : "0",
+            "Class::Load" : "0",
+            "File::Copy" : "0",
+            "Getopt::Long" : "0",
+            "IO::Handle::Util" : "0",
+            "IO::Interactive" : "0",
+            "IO::Pipe" : "0",
+            "IO::String" : "0",
+            "List::MoreUtils" : "0",
+            "Moose" : "0",
+            "MooseX::ClassAttribute" : "0",
+            "MooseX::NonMoose" : "0",
+            "MooseX::Types::Moose" : "0",
+            "Path::Class" : "0",
             "Pinto" : "0.030",
-            "Pinto::Types" : 0,
-            "Pod::Usage" : 0,
+            "Pinto::Constants" : "0",
+            "Pinto::Result" : "0",
+            "Pinto::Types" : "0",
+            "Plack::Component" : "0",
+            "Plack::MIME" : "0",
+            "Plack::Middleware::Auth::Basic" : "0",
+            "Plack::Request" : "0",
+            "Plack::Response" : "0",
+            "Plack::Runner" : "0",
+            "Pod::Usage" : "0",
+            "Proc::Fork" : "0",
+            "Scalar::Util" : "0",
+            "Try::Tiny" : "0",
             "perl" : "5.006",
-            "strict" : 0,
-            "warnings" : 0
+            "strict" : "0",
+            "warnings" : "0"
          }
       },
       "test" : {
          "requires" : {
-            "Dancer::Test" : 0,
-            "File::Find" : 0,
-            "FindBin" : 0,
-            "Pinto::Tester" : 0,
-            "Test::More" : 0
+            "Apache::Htpasswd" : "0",
+            "File::Find" : "0",
+            "File::Temp" : "0",
+            "FindBin" : "0",
+            "HTTP::Request" : "0",
+            "HTTP::Request::Common" : "0",
+            "Pinto::Tester" : "0",
+            "Plack::Test" : "0",
+            "Test::More" : "0"
          }
       }
    },
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.034"
+         "version" : "0.035"
       },
-      "Pinto::Server::Routes" : {
-         "file" : "lib/Pinto/Server/Routes.pm",
-         "version" : "0.034"
+      "Pinto::Server::ActionResponder" : {
+         "file" : "lib/Pinto/Server/ActionResponder.pm",
+         "version" : "0.035"
+      },
+      "Pinto::Server::ActionResponder::Splatting" : {
+         "file" : "lib/Pinto/Server/ActionResponder/Splatting.pm",
+         "version" : "0.035"
+      },
+      "Pinto::Server::ActionResponder::Streaming" : {
+         "file" : "lib/Pinto/Server/ActionResponder/Streaming.pm",
+         "version" : "0.035"
+      },
+      "Pinto::Server::Handler" : {
+         "file" : "lib/Pinto/Server/Handler.pm",
+         "version" : "0.035"
       }
    },
    "release_status" : "stable",
@@ -79,6 +114,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.034"
+   "version" : "0.035"
 }
 

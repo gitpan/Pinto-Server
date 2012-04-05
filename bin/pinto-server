@@ -7,23 +7,36 @@ use strict;
 use warnings;
 
 use Pod::Usage;
-use Getopt::Long;
-
+use List::MoreUtils qw(none);
+use Getopt::Long qw(:config pass_through);  # keeps unrecognized options in
+use Plack::Runner;
 use Pinto::Server;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.034'; # VERSION
+our $VERSION = '0.035'; # VERSION
 
 #-----------------------------------------------------------------------------
 
-my @opt_spec = qw(daemon port=i root|r=s);
+my @opt_spec = qw(root|r=s auth=s%);
 GetOptions(\my %opts, @opt_spec) or pod2usage();
 
 $opts{root} ||= $ENV{PINTO_REPOSITORY_ROOT};
 pod2usage(-message => 'Must specify a repository root') if not $opts{root};
 
-Pinto::Server->new(%opts)->run();
+# HACK: To avoid defaulting to the Plack default port, we must wedge
+# in our own --port argument, unless the user has specified their own.
+push @ARGV, ('--port' => Pinto::Server->default_port())
+  if none { /^ --? p(?: ort)?/x } @ARGV;
+
+my $runner = Plack::Runner->new();
+$runner->parse_options(@ARGV);
+
+my $server = Pinto::Server->new(%opts);
+my $app    = $server->to_app();
+
+$runner->run($app);
+
 
 #----------------------------------------------------------------------------
 
@@ -39,7 +52,7 @@ pinto-server - provide a web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.034
+version 0.035
 
 =head1 SYNOPSIS
 
@@ -71,45 +84,56 @@ serve.
 
 =over 4
 
-=item --daemon
+=item --auth
 
-Tells C<pinto-server> to fork and run in a separate process.
+Indicates the an option describing the authentication scheme to use
+(default is no authentication).  Each time this is used, a key=value pair must
+follow; one of them must be 'backend', which should correspond to a class in
+the L<Authen::Simple> namespace, e.g. backend=Kerberos would indicate that
+Kerberos authentication will be used, with the L<Authen::Simple::Kerberos>
+backend.
 
-=item --port=N
+Options that follow will be passed as-is to the authentication backend.
 
-Sets the port number for the server to listen on.  Default is 3000.
+For example, this would be a valid configuration for Kerberos:
 
-=back
+  --auth backend=Kerberos --auth realm=REALM.COMPANY.COM
 
-=head1 SUPPORTED ACTIONS
+and this is how the authentication backend will be constructed:
 
-This version of C<pinto-server> supports the following actions:
+  my $auth = Authen::Simple::Kerberos->new(
+    realm => 'REALM.COMPANY.COM'
+  );
 
-=over 4
+=item other options
 
-=item * add: Adds a local distribution to the repository
-
-=item * remove: Removes a distribution from the repository
-
-=item * pin: Hold the index to a particular version of a package
-
-=item * unpin: Loosen a package that has been pinned
-
-=item * list: Report the contents of the repository
-
-=item * statistics: Report some statistics about the repository
+All other options supported by L<plackup> are supported too, such as
+C<--server>, C<--port>, C<--daemonize>, etc.  These will be passed to
+L<Plack::Runner>.
 
 =back
 
 =head1 DEPLOYMENT
 
-C<pinto-server> can be run as a stand-alone server as shown in the
-L</SYNOPSIS>.  However, this may not perform well under heavy load.
+C<pinto-server> is PSGI compatible, running under L<Plack::Runner> by
+default.  It will use whatever backend you specify on the command line
+or have configured in your environment.
 
-C<pinto-server> is also PSGI compatible, so if you need a more
-powerful robust server, you can run it under L<Plack> like this:
+If you wish to add your own middleware and/or customize the backend in
+other ways, you can use L<Pinto::Server> in a custom .psgi script like
+this:
 
-  $> plackup [OPTIONS] /path/to/pinto-server
+    # my-pinto-server.psgi
+
+    my %opts   = (...);
+    my $server = Pinto::Server->new(%opts);
+    my $app    = $server->to_app();
+
+    # wrap $app with middlewares here and/or
+    # insert code customized for your backend
+    # which operates on the $app
+
+Then you may directly launch F<my-pinto-server.psgi> using L<plackup>.
 
 =head1 CAVEATS
 
@@ -123,13 +147,6 @@ that it is the only actor affecting the Pinto repository within the
 VCS.  If you start modifying Pinto's area of the VCS directly, then
 the working copy for C<pinto-server> will become out of date and
 conflicts will happen.
-
-=head1 LIMITATIONS
-
-C<pinto-server> speaks HTTP, but does not actually serve HTML.  At the
-moment, it is geared toward command line tools like L<pinto-remote> so
-it just returns plain text.  This will probably change as
-C<pinto-server> evolves into a real web application.
 
 =head1 AUTHOR
 

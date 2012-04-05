@@ -1,87 +1,132 @@
-package Pinto::Server;
-
 # ABSTRACT: Web interface to a Pinto repository
 
+package Pinto::Server;
+
 use Moose;
-use MooseX::Types::Moose qw(Int Bool);
+use MooseX::NonMoose;
+use MooseX::ClassAttribute;
+use MooseX::Types::Moose qw(Int HashRef);
+
+use Carp;
+use Path::Class;
+use Scalar::Util qw(blessed);
+use Class::Load qw(load_class);
+use IO::Interactive qw(is_interactive);
+
+use Plack::Request;
+use Plack::Middleware::Auth::Basic;
 
 use Pinto;
 use Pinto::Types qw(Dir);
-use Pinto::Server::Routes;
+use Pinto::Constants qw($PINTO_SERVER_DEFAULT_PORT);
+use Pinto::Server::Handler;
 
-use Dancer qw(:moose :script);
+#-------------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------------
+our $VERSION = '0.035'; # VERSION
 
-our $VERSION = '0.034'; # VERSION
+#-------------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------------
+extends qw(Plack::Component);
+
+#-------------------------------------------------------------------------------
 
 
-has root => (
-    is       => 'ro',
-    isa      => Dir,
-    coerce   => 1,
-    required => 1,
+has root  => (
+   is       => 'ro',
+   isa      => Dir,
+   required => 1,
+   coerce   => 1,
 );
 
-#-----------------------------------------------------------------------------
+
+has auth => (
+    is      => 'ro',
+    isa     => HashRef,
+    traits  => ['Hash'],
+    handles => { auth_options => 'elements' },
+);
 
 
-has port => (
+has handler => (
+    is      => 'ro',
+    isa     => 'Pinto::Server::Handler',
+    builder => '_build_handler',
+    lazy    => 1,
+);
+
+
+
+class_has default_port => (
     is       => 'ro',
     isa      => Int,
-    default  => 3000,
+    default  => $PINTO_SERVER_DEFAULT_PORT,
 );
 
-#-----------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------
 
-has daemon => (
-    is       => 'ro',
-    isa      => Bool,
-    default  => 0,
-);
-
-#-----------------------------------------------------------------------------
-
-
-sub run {
+sub _build_handler {
     my ($self) = @_;
 
-    Dancer::set( root   => $self->root()  );
-    Dancer::set( port   => $self->port()   );
-    Dancer::set( daemon => $self->daemon() );
-
-    $self->_initialize();
-    return Dancer::dance();
+    return Pinto::Server::Handler->new(root => $self->root);
 }
 
-#-----------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
-sub _initialize {
+sub to_app {
     my ($self) = @_;
 
-    ## no critic qw(Carping)
+    $self->prepare_app;
+    my $app = sub { $self->call(@_) };
+
+    if (my %auth_options = $self->auth_options) {
+
+        my $backend = delete $auth_options{backend}
+            or carp 'No auth backend provided!';
+
+        my $class = 'Authen::Simple::' . $backend;
+        print "Authenticating using $class\n" if is_interactive();
+        load_class($class);
+
+        $app = Plack::Middleware::Auth::Basic->wrap($app,
+            authenticator => $class->new(%auth_options) );
+    }
+
+    return $app;
+}
+
+#-------------------------------------------------------------------------------
+
+sub prepare_app {
+
+    my ($self) = @_;
 
     my $root = $self->root();
-    print "Initializing pinto repository at '$root' ... ";
-    my $pinto = eval { Pinto::Server::Routes::pinto() };
-    print "\n" and die "$@" if not $pinto;
+    print "Initializing pinto repository at $root\n" if is_interactive();
 
-    $pinto->new_batch(noinit => 0);
-    $pinto->add_action('Nop');
-
-    my $result = $pinto->run_actions();
-    print "\n" and die $result->to_string() . "\n" if not $result->is_success();
-
-    print "Done\n";
+    my $pinto  = Pinto->new(root => $self->root);
+    my $result = $pinto->new_batch(noinit => 0)->add_action('Nop')->run_actions;
+    confess $result if not $result->is_success;
 
     return $self;
 }
 
-#----------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
+sub call {
+    my ($self, $env) = @_;
+
+    my $request  = Plack::Request->new($env);
+    my $response = $self->handler->handle($request);
+
+    $response = $response->finalize()
+        if blessed($response) && $response->can('finalize');
+
+    return $response;
+}
+
+#-------------------------------------------------------------------------------
 1;
 
 
@@ -98,17 +143,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.034
-
-=head1 DESCRIPTION
-
-There is nothing to see here.
-
-Look at L<pinto-server> instead.
-
-Then you'll probably want to look at L<pinto-remote>.
-
-See L<Pinto::Manual> for a complete guide.
+version 0.035
 
 =head1 ATTRIBUTES
 
@@ -118,20 +153,26 @@ The path to the root directory of your Pinto repository.  The
 repository must already exist at this location.  This attribute is
 required.
 
-=head2 port
+=head2 auth
 
-The port number the server shall listen on.  The default is 3000.
+The hashref of authentication options, if authentication is to be used within
+the server. One of the options must be 'backend', to specify which
+Authen::Simple:: class to use; the other key/value pairs will be passed as-is
+to the Authen::Simple class.
 
-=head2 daemon
+=head2 handler
 
-If true, Pinto::Server will fork and run in a separate process.
-Default is false.
+An object that does the L<Pinto::Server::Handler> role.  This object
+will do the work of processing the request and returning a response.
 
-=head1 METHODS
+=head2 default_port
 
-=head2 run()
+Returns the default port number that the server will listen on.  This
+is a class attribute.
 
-Starts the Pinto::Server.  Returns a PSGI-compatible code reference.
+There is nothing to see here.
+
+Look at L<pinto-server> if you want to start the server.
 
 =head1 SUPPORT
 
@@ -216,5 +257,6 @@ the same terms as the Perl 5 programming language system itself.
 
 
 __END__
+
 
 
