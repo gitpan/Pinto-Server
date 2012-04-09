@@ -31,20 +31,21 @@ no_index:
 provides:
   Pinto::Server:
     file: lib/Pinto/Server.pm
-    version: 0.035
+    version: 0.036
   Pinto::Server::ActionResponder:
     file: lib/Pinto/Server/ActionResponder.pm
-    version: 0.035
+    version: 0.036
   Pinto::Server::ActionResponder::Splatting:
     file: lib/Pinto/Server/ActionResponder/Splatting.pm
-    version: 0.035
+    version: 0.036
   Pinto::Server::ActionResponder::Streaming:
     file: lib/Pinto/Server/ActionResponder/Streaming.pm
-    version: 0.035
+    version: 0.036
   Pinto::Server::Handler:
     file: lib/Pinto/Server/Handler.pm
-    version: 0.035
+    version: 0.036
 requires:
+  Authen::Simple::Passwd: 0
   Carp: 0
   Class::Load: 0
   File::Copy: 0
@@ -54,12 +55,14 @@ requires:
   IO::Pipe: 0
   IO::String: 0
   List::MoreUtils: 0
+  List::Util: 0
+  Log::Dispatch::Handle: 0
   Moose: 0
   MooseX::ClassAttribute: 0
   MooseX::NonMoose: 0
   MooseX::Types::Moose: 0
   Path::Class: 0
-  Pinto: 0.030
+  Pinto: 0.036
   Pinto::Constants: 0
   Pinto::Result: 0
   Pinto::Types: 0
@@ -79,4 +82,4 @@ requires:
 resources:
   bugtracker: https://github.com/thaljef/Pinto-Server/issues
   repository: git://github.com/thaljef/Pinto-Server.git
-version: 0.035
+version: 0.036

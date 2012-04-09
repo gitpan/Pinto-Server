@@ -15,7 +15,7 @@ use Pinto::Types qw(Dir);
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.035'; # VERSION
+our $VERSION = '0.036'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -121,7 +121,7 @@ Pinto::Server::Handler - Handles requests to the Pinto server.
 
 =head1 VERSION
 
-version 0.035
+version 0.036
 
 =head1 ATTRIBUTES
 
