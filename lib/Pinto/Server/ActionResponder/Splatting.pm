@@ -9,7 +9,7 @@ use Plack::Response;
 
 #------------------------------------------------------------------------------
 
-our $VERSION = '0.036'; # VERSION
+our $VERSION = '0.037'; # VERSION
 
 #------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ Pinto::Server::ActionResponder::Splatting - An ActionResponder that returns the 
 
 =head1 VERSION
 
-version 0.036
+version 0.037
 
 =head1 AUTHOR
 

@@ -87,23 +87,23 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.036"
+         "version" : "0.037"
       },
       "Pinto::Server::ActionResponder" : {
          "file" : "lib/Pinto/Server/ActionResponder.pm",
-         "version" : "0.036"
+         "version" : "0.037"
       },
       "Pinto::Server::ActionResponder::Splatting" : {
          "file" : "lib/Pinto/Server/ActionResponder/Splatting.pm",
-         "version" : "0.036"
+         "version" : "0.037"
       },
       "Pinto::Server::ActionResponder::Streaming" : {
          "file" : "lib/Pinto/Server/ActionResponder/Streaming.pm",
-         "version" : "0.036"
+         "version" : "0.037"
       },
       "Pinto::Server::Handler" : {
          "file" : "lib/Pinto/Server/Handler.pm",
-         "version" : "0.036"
+         "version" : "0.037"
       }
    },
    "release_status" : "stable",
@@ -117,6 +117,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.036"
+   "version" : "0.037"
 }
 
