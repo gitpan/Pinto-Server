@@ -9,7 +9,6 @@ my %module_build_args = (
   "build_requires" => {
     "Apache::Htpasswd" => 0,
     "File::Find" => 0,
-    "File::Temp" => 0,
     "FindBin" => 0,
     "HTTP::Request" => 0,
     "HTTP::Request::Common" => 0,
@@ -26,7 +25,7 @@ my %module_build_args = (
     "Jeffrey Ryan Thalhammer <jeff\@imaginative-software.com>"
   ],
   "dist_name" => "Pinto-Server",
-  "dist_version" => "0.037",
+  "dist_version" => "0.042",
   "license" => "perl",
   "module_name" => "Pinto::Server",
   "recommends" => {},
@@ -36,31 +35,32 @@ my %module_build_args = (
     "Carp" => 0,
     "Class::Load" => 0,
     "File::Copy" => 0,
+    "File::Temp" => 0,
     "Getopt::Long" => 0,
     "IO::Handle::Util" => 0,
     "IO::Interactive" => 0,
     "IO::Pipe" => 0,
-    "IO::String" => 0,
+    "JSON" => 0,
     "List::MoreUtils" => 0,
-    "List::Util" => 0,
     "Log::Dispatch::Handle" => 0,
     "Moose" => 0,
     "MooseX::ClassAttribute" => 0,
     "MooseX::NonMoose" => 0,
     "MooseX::Types::Moose" => 0,
     "Path::Class" => 0,
-    "Pinto" => "0.036",
+    "Pinto" => "0.044",
     "Pinto::Constants" => 0,
     "Pinto::Result" => 0,
     "Pinto::Types" => 0,
     "Plack::Component" => 0,
-    "Plack::MIME" => 0,
     "Plack::Middleware::Auth::Basic" => 0,
+    "Plack::Mime" => 0,
     "Plack::Request" => 0,
     "Plack::Response" => 0,
     "Plack::Runner" => 0,
     "Pod::Usage" => 0,
     "Proc::Fork" => 0,
+    "Router::Simple" => 0,
     "Scalar::Util" => 0,
     "Try::Tiny" => 0,
     "perl" => "5.006",
@@ -68,7 +68,7 @@ my %module_build_args = (
     "warnings" => 0
   },
   "script_files" => [
-    "bin/pinto-server"
+    "bin/pintod"
   ]
 );
 

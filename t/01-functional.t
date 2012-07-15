@@ -6,6 +6,7 @@ use warnings;
 use Test::More;
 use Plack::Test;
 
+use JSON;
 use FindBin;
 use Path::Class;
 use HTTP::Request::Common;
@@ -17,33 +18,30 @@ use Pinto::Constants qw(:all);
 #------------------------------------------------------------------------------
 # Setup...
 
-my %nostream = ();
-
-my $t    = Pinto::Tester->new();
-my %opts = (root => $t->pinto->root());
-my $app  = Pinto::Server->new(%opts)->to_app();
-
-START:
+my $t    = Pinto::Tester->new;
+my %opts = (root => $t->pinto->root);
+my $app  = Pinto::Server->new(%opts)->to_app;
 
 #------------------------------------------------------------------------------
-# Fetching a file...
+# Fetching an index...
 
 test_psgi
     app => $app,
     client => sub {
         my $cb  = shift;
-        my $req = GET('modules/02packages.details.txt.gz');
+        my $req = GET('init/modules/02packages.details.txt.gz');
         my $res = $cb->($req);
 
+        $DB::single =1;
         is $res->code, 200, 'Correct status code';
 
         is $res->header('Content-Type'), 'application/x-gzip',
             'Correct Type header';
 
-        ok $res->header('Content-Length') > 300,
+        cmp_ok $res->header('Content-Length'), '>=', 250,
             'Reasonable Length header'; # Actual length may vary
 
-        ok $res->header('Content-Length') < 400,
+        cmp_ok $res->header('Content-Length'), '<', 400,
             'Reasonable Length header'; # Actual length may vary
 
         is $res->header('Content-Length'), length $res->content,
@@ -58,8 +56,8 @@ test_psgi
     client => sub {
         my $cb  = shift;
         my $archive = file($FindBin::Bin, qw(data TestDist-1.0.tar.gz))->stringify;
-        my $params  = {%nostream, author => 'THEBARD', norecurse => 1, archive => [$archive]};
-        my $req     = POST( 'action/add', Content => $params);
+        my $params  = {author => 'THEBARD', norecurse => 1, archives => [$archive]};
+        my $req     = POST( 'action/add', Content => {action_args => encode_json($params)} );
         my $res     = $cb->($req);
         is $res->code, 200, 'Correct status code';
 
@@ -91,14 +89,38 @@ test_psgi
     };
 
 #------------------------------------------------------------------------------
+# Fetching the archive...
+
+test_psgi
+    app => $app,
+    client => sub {
+        my $cb  = shift;
+        my $archive = file($FindBin::Bin, qw(data TestDist-1.0.tar.gz))->stringify;
+        my $req = GET('init/authors/id/T/TH/THEBARD/TestDist-1.0.tar.gz');
+        my $res = $cb->($req);
+
+        is $res->code, 200, 'Correct status code';
+
+        is $res->header('Content-Type'), 'application/x-gzip',
+            'Correct Type header';
+
+        is $res->header('Content-Length'), -s $archive,
+            'Length header matches file size';
+
+        is $res->header('Content-Length'), length $res->content,
+            'Length header matches actual length';
+    };
+
+
+#------------------------------------------------------------------------------
 # Listing repository contents...
 
 test_psgi
     app => $app,
     client => sub {
         my $cb  = shift;
-        my $params = {%nostream};
-        my $req    = POST('action/list', Content => $params);
+        my $params = {};
+        my $req    = POST('action/list', Content => {action_args => encode_json($params)});
         my $res    = $cb->($req);
 
         is   $res->code, 200, 'Correct status code';
@@ -106,36 +128,11 @@ test_psgi
         # Note that the lines of the listing itself should NOT contain
         # the $PINTO_SERVER_RESPONSE_LINE_PREFIX in front of each line.
 
-        like $res->content, qr{^\@rl \s+ Foo \s+ 0.7 \s+ \S+ \n}mx,
+        like $res->content, qr{^rl \s+ Foo \s+ 0.7 \s+ \S+ \n}mx,
             'Listing contains the Foo package';
 
-        like $res->content, qr{^\@rl \s+ Bar \s+ 0.8 \s+ \S+ \n}mx,
+        like $res->content, qr{^rl \s+ Bar \s+ 0.8 \s+ \S+ \n}mx,
             'Listing contains the Bar package';
-    };
-
-#------------------------------------------------------------------------------
-
-test_psgi
-    app => $app,
-    client => sub {
-        my $cb  = shift;
-        my $params = {%nostream, verbose => 2};
-        my $req    = POST('action/purge', Content => $params);
-        my $res    = $cb->($req);
-
-        is   $res->code, 200, 'Correct status code';
-
-        like $res->content, qr{Process \d+ got the lock},
-            'Content includes log messages when verbose';
-
-        my $content = $res->content;
-        chomp $content;
-
-        my @lines = split m{\n}, $content;
-        ok @lines > 3, 'Got a reasonable number of lines'; # May vary
-
-        like $_, qr{^$PINTO_SERVER_RESPONSE_LINE_PREFIX},
-            'Log line starts with prefix' for @lines;
     };
 
 #------------------------------------------------------------------------------
@@ -157,8 +154,8 @@ test_psgi
     app => $app,
     client => sub {
         my $cb = shift;
-        my $params = {%nostream};
-        my $req    = POST('action/bogus', Content => $params);
+        my $params = {};
+        my $req    = POST('action/bogus', Content => {action_args => encode_json($params)});
         my $res    = $cb->($req);
 
         my $content = $res->content;
@@ -174,16 +171,8 @@ test_psgi
     };
 
 #------------------------------------------------------------------------------
-# Do all tests again, without streaming
 
-unless (%nostream) {
-    $nostream{nostream} = 1;
-    goto START;
-}
-
-#------------------------------------------------------------------------------
-
-done_testing();
+done_testing;
 
 
 
