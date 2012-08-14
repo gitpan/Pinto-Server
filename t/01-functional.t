@@ -7,7 +7,6 @@ use Test::More;
 use Plack::Test;
 
 use JSON;
-use FindBin;
 use Path::Class;
 use PerlIO::gzip;
 use HTTP::Request::Common;
@@ -73,6 +72,30 @@ test_psgi
         is $res->header('Content-Length'), length $res->content,
             'Length header matches actual length';
     };
+
+#------------------------------------------------------------------------------
+# Test fetching legacy indexes (used by the cpan[1] client)
+
+test_psgi
+    app => $app,
+    client => sub {
+        my $cb  = shift;
+
+        # Test each path, with and without a stack name in the request
+
+        my @stacks = ('init/', '');
+        my @paths  = qw(authors/01mailrc.txt.gz modules/03modlist.data.gz);
+
+        for my $stack (@stacks) {
+          for my $path (@paths) {
+            my $url = $stack . $path;
+            my $req = GET($url);
+            my $res = $cb->($req);
+            is $res->code, 200, "Got response for $url";
+          }
+        }
+    };
+
 
 #------------------------------------------------------------------------------
 # Add an archive, then fetch it back.  Finally, check that all packages in the

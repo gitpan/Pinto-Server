@@ -10,7 +10,7 @@ use Plack::MIME;
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.047'; # VERSION
+our $VERSION = '0.048'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -28,6 +28,9 @@ sub respond {
     # will assume that 'authors' and 'modules' are actual paths.
     # Anything else is a stack name that can be discarded.
     shift @path_parts if $path_parts[0] !~ m{^ (?:authors|modules) $}x;
+
+    # TODO: If a stack is specified, then check that the stack
+    # actually exists.  If not then return an error.
 
     my $file = Path::Class::file($self->root, @path_parts);
 
@@ -61,7 +64,7 @@ Pinto::Server::Responder::File - Responder for static files
 
 =head1 VERSION
 
-version 0.047
+version 0.048
 
 =head1 AUTHOR
 

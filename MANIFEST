@@ -20,7 +20,6 @@ t/00-compile.t
 t/00-report-prereqs.t
 t/01-functional.t
 t/02-authentication.t
-t/data/TestDist-1.0.tar.gz
 weaver.ini
 xt/author/critic.t
 xt/author/pod-spell.t

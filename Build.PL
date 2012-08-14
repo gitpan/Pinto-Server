@@ -11,7 +11,6 @@ my %module_build_args = (
     "ExtUtils::MakeMaker" => 0,
     "File::Find" => 0,
     "File::Spec::Functions" => 0,
-    "FindBin" => 0,
     "HTTP::Request" => 0,
     "HTTP::Request::Common" => 0,
     "List::Util" => 0,
@@ -29,7 +28,7 @@ my %module_build_args = (
     "Jeffrey Ryan Thalhammer <jeff\@imaginative-software.com>"
   ],
   "dist_name" => "Pinto-Server",
-  "dist_version" => "0.047",
+  "dist_version" => "0.048",
   "license" => "perl",
   "module_name" => "Pinto::Server",
   "recommends" => {},

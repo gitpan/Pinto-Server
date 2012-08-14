@@ -27,7 +27,6 @@ my @modules = qw(
   File::Spec::Functions
   File::Temp
   File::Which
-  FindBin
   Getopt::Long
   HTTP::Request
   HTTP::Request::Common

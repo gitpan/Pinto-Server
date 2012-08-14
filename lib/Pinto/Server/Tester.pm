@@ -12,7 +12,7 @@ use Pinto::Types qw(File);
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.047'; # VERSION
+our $VERSION = '0.048'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -168,7 +168,7 @@ Pinto::Server::Tester - A class for testing a Pinto server
 
 =head1 VERSION
 
-version 0.047
+version 0.048
 
 =head1 ATTRIBUTES
 
