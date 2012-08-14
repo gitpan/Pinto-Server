@@ -45,13 +45,15 @@ my @modules = qw(
   MooseX::Types::Moose
   POSIX
   Path::Class
+  PerlIO::gzip
   Pinto
   Pinto::Constants
   Pinto::Result
   Pinto::Tester
+  Pinto::Tester::Util
   Pinto::Types
+  Plack::MIME
   Plack::Middleware::Auth::Basic
-  Plack::Mime
   Plack::Request
   Plack::Response
   Plack::Runner

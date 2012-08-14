@@ -12,6 +12,8 @@ build_requires:
   HTTP::Request::Common: 0
   List::Util: 0
   Module::Build: 0.3601
+  PerlIO::gzip: 0
+  Pinto::Tester::Util: 0
   Plack::Test: 0
   Test::More: 0
 configure_requires:
@@ -32,25 +34,25 @@ no_index:
 provides:
   Pinto::Server:
     file: lib/Pinto/Server.pm
-    version: 0.046
+    version: 0.047
   Pinto::Server::Responder:
     file: lib/Pinto/Server/Responder.pm
-    version: 0.046
+    version: 0.047
   Pinto::Server::Responder::Action:
     file: lib/Pinto/Server/Responder/Action.pm
-    version: 0.046
+    version: 0.047
   Pinto::Server::Responder::File:
     file: lib/Pinto/Server/Responder/File.pm
-    version: 0.046
+    version: 0.047
   Pinto::Server::Responder::Index:
     file: lib/Pinto/Server/Responder/Index.pm
-    version: 0.046
+    version: 0.047
   Pinto::Server::Router:
     file: lib/Pinto/Server/Router.pm
-    version: 0.046
+    version: 0.047
   Pinto::Server::Tester:
     file: lib/Pinto/Server/Tester.pm
-    version: 0.046
+    version: 0.047
 requires:
   Authen::Simple::Passwd: 0
   Carp: 0
@@ -76,8 +78,8 @@ requires:
   Pinto::Result: 0
   Pinto::Tester: 0
   Pinto::Types: 0
+  Plack::MIME: 0
   Plack::Middleware::Auth::Basic: 0
-  Plack::Mime: 0
   Plack::Request: 0
   Plack::Response: 0
   Plack::Runner: 0
@@ -93,4 +95,4 @@ requires:
 resources:
   bugtracker: https://github.com/thaljef/Pinto-Server/issues
   repository: git://github.com/thaljef/Pinto-Server.git
-version: 0.046
+version: 0.047

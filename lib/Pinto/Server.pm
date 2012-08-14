@@ -19,7 +19,7 @@ use Pinto::Server::Router;
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.046'; # VERSION
+our $VERSION = '0.047'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -111,7 +111,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.046
+version 0.047
 
 =head1 ATTRIBUTES
 

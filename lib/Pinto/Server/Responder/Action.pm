@@ -1,4 +1,4 @@
-# ABSTRACT: Responder for Actions
+# ABSTRACT: Responder for action requests
 
 package Pinto::Server::Responder::Action;
 
@@ -23,7 +23,7 @@ use Pinto::Constants qw(:all);
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.046'; # VERSION
+our $VERSION = '0.047'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -67,6 +67,12 @@ sub _run_action {
             my $writer = $pipe->writer;
             $action_args->{out} ||= $writer;
 
+            # I'm not sure why, but cleanup isn't happening when we get
+            # a TERM signal from the parent process.  I suspect it
+            # has something to do with File::NFSLock messing with %SIG
+
+            local $SIG{TERM} = sub { File::Temp::cleanup; exit };
+
             print { $writer } "$PINTO_SERVER_RESPONSE_PROLOGUE\n";
             my $pinto = Pinto->new(%{$pinto_args}, root => $self->root);
             my $logger = $self->_make_logger($pinto_args->{log_level}, $writer);
@@ -84,6 +90,18 @@ sub _run_action {
             my $child_pid = shift;
             my $reader    = $pipe->reader;
 
+            # If the client aborts (usually by hitting Ctrl-C) then we
+            # get a PIPE signal.  That is our cue to stop the Action
+            # by killing the child.  TODO: Find a way to set these
+            # signal handlers locally, rather than globally.  This is
+            # tricky because we return a callback, which might not
+            # always be in the callback when we get the signal.
+
+            ## no critic qw(RequireLocalizedPunctuationVars)
+            $SIG{PIPE} = sub { kill 'TERM', $child_pid };
+            $SIG{CHLD} = 'IGNORE';
+            ## use critic
+
             # In Plack::Util::foreach(), input is buffered at 65536
             # bytes. We want to buffer each line only.  So we make our
             # own input handle with $/ set accordingly.
@@ -91,15 +109,8 @@ sub _run_action {
             my $getline   = sub { local $/ = "\n"; $reader->getline };
             my $io_handle = io_from_getline( $getline );
 
-            # If the parent looses the connection (usually because the
-            # client at the other end was killed by Ctrl-C) then we
-            # will get a SIGPIPE.  At that point, we need to kill the
-            # child.  Not sure if parent should die too.
-
             $response  = sub {
                 my $responder = shift;
-                waitpid $child_pid, WNOHANG;
-                local $SIG{PIPE} = sub { kill 2, $child_pid };
                 my $headers = ['Content-Type' => 'text/plain'];
                 return $responder->( [200, $headers, $io_handle] );
             };
@@ -159,11 +170,11 @@ __END__
 
 =head1 NAME
 
-Pinto::Server::Responder::Action - Responder for Actions
+Pinto::Server::Responder::Action - Responder for action requests
 
 =head1 VERSION
 
-version 0.046
+version 0.047
 
 =head1 AUTHOR
 

@@ -16,6 +16,8 @@ my %module_build_args = (
     "HTTP::Request::Common" => 0,
     "List::Util" => 0,
     "Module::Build" => "0.3601",
+    "PerlIO::gzip" => 0,
+    "Pinto::Tester::Util" => 0,
     "Plack::Test" => 0,
     "Test::More" => 0
   },
@@ -27,7 +29,7 @@ my %module_build_args = (
     "Jeffrey Ryan Thalhammer <jeff\@imaginative-software.com>"
   ],
   "dist_name" => "Pinto-Server",
-  "dist_version" => "0.046",
+  "dist_version" => "0.047",
   "license" => "perl",
   "module_name" => "Pinto::Server",
   "recommends" => {},
@@ -57,8 +59,8 @@ my %module_build_args = (
     "Pinto::Result" => 0,
     "Pinto::Tester" => 0,
     "Pinto::Types" => 0,
+    "Plack::MIME" => 0,
     "Plack::Middleware::Auth::Basic" => 0,
-    "Plack::Mime" => 0,
     "Plack::Request" => 0,
     "Plack::Response" => 0,
     "Plack::Runner" => 0,
