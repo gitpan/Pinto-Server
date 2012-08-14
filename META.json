@@ -39,23 +39,25 @@
             "Class::Load" : "0",
             "File::Copy" : "0",
             "File::Temp" : "0",
+            "File::Which" : "0",
             "Getopt::Long" : "0",
             "IO::Handle::Util" : "0",
             "IO::Interactive" : "0",
             "IO::Pipe" : "0",
+            "IPC::Run" : "0",
             "JSON" : "0",
             "List::MoreUtils" : "0",
             "Log::Dispatch::Handle" : "0",
             "Moose" : "0",
             "MooseX::ClassAttribute" : "0",
-            "MooseX::NonMoose" : "0",
             "MooseX::Types::Moose" : "0",
+            "POSIX" : "0",
             "Path::Class" : "0",
-            "Pinto" : "0.044",
+            "Pinto" : "0.046",
             "Pinto::Constants" : "0",
             "Pinto::Result" : "0",
+            "Pinto::Tester" : "0",
             "Pinto::Types" : "0",
-            "Plack::Component" : "0",
             "Plack::Middleware::Auth::Basic" : "0",
             "Plack::Mime" : "0",
             "Plack::Request" : "0",
@@ -65,6 +67,7 @@
             "Proc::Fork" : "0",
             "Router::Simple" : "0",
             "Scalar::Util" : "0",
+            "Test::TCP" : "0",
             "Try::Tiny" : "0",
             "perl" : "5.006",
             "strict" : "0",
@@ -74,11 +77,13 @@
       "test" : {
          "requires" : {
             "Apache::Htpasswd" : "0",
+            "ExtUtils::MakeMaker" : "0",
             "File::Find" : "0",
+            "File::Spec::Functions" : "0",
             "FindBin" : "0",
             "HTTP::Request" : "0",
             "HTTP::Request::Common" : "0",
-            "Pinto::Tester" : "0",
+            "List::Util" : "0",
             "Plack::Test" : "0",
             "Test::More" : "0"
          }
@@ -87,27 +92,31 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.042"
+         "version" : "0.046"
       },
       "Pinto::Server::Responder" : {
          "file" : "lib/Pinto/Server/Responder.pm",
-         "version" : "0.042"
+         "version" : "0.046"
       },
       "Pinto::Server::Responder::Action" : {
          "file" : "lib/Pinto/Server/Responder/Action.pm",
-         "version" : "0.042"
+         "version" : "0.046"
       },
       "Pinto::Server::Responder::File" : {
          "file" : "lib/Pinto/Server/Responder/File.pm",
-         "version" : "0.042"
+         "version" : "0.046"
       },
       "Pinto::Server::Responder::Index" : {
          "file" : "lib/Pinto/Server/Responder/Index.pm",
-         "version" : "0.042"
+         "version" : "0.046"
       },
       "Pinto::Server::Router" : {
          "file" : "lib/Pinto/Server/Router.pm",
-         "version" : "0.042"
+         "version" : "0.046"
+      },
+      "Pinto::Server::Tester" : {
+         "file" : "lib/Pinto/Server/Tester.pm",
+         "version" : "0.046"
       }
    },
    "release_status" : "stable",
@@ -121,6 +130,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.042"
+   "version" : "0.046"
 }
 

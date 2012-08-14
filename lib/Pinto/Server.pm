@@ -3,7 +3,6 @@
 package Pinto::Server;
 
 use Moose;
-use MooseX::NonMoose;
 use MooseX::ClassAttribute;
 use MooseX::Types::Moose qw(Int HashRef);
 
@@ -20,11 +19,7 @@ use Pinto::Server::Router;
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.042'; # VERSION
-
-#-------------------------------------------------------------------------------
-
-extends qw(Plack::Component);
+our $VERSION = '0.046'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -63,6 +58,7 @@ class_has default_port => (
 
 #-------------------------------------------------------------------------------
 
+
 sub to_app {
     my ($self) = @_;
 
@@ -85,6 +81,7 @@ sub to_app {
 }
 
 #-------------------------------------------------------------------------------
+
 
 sub call {
     my ($self, $env) = @_;
@@ -114,7 +111,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.042
+version 0.046
 
 =head1 ATTRIBUTES
 
@@ -140,6 +137,17 @@ will do the work of processing the request and returning a response.
 
 Returns the default port number that the server will listen on.  This
 is a class attribute.
+
+=head1 METHODS
+
+=head2 to_app()
+
+Returns the application as a subroutine reference.
+
+=head2 call( $env )
+
+Invokes the application with the specified environment.  Returns a
+PSGI-compatible response.
 
 There is nothing to see here.
 

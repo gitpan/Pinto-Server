@@ -12,7 +12,7 @@ use Pinto;
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.042'; # VERSION
+our $VERSION = '0.046'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ Pinto::Server::Responder::Index - Responder for the 02packages index
 
 =head1 VERSION
 
-version 0.042
+version 0.046
 
 =head1 AUTHOR
 

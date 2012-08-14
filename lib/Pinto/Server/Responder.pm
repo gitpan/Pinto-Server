@@ -10,7 +10,7 @@ use Pinto::Types qw(Dir);
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.042'; # VERSION
+our $VERSION = '0.046'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ Pinto::Server::Responder - Base class for responders
 
 =head1 VERSION
 
-version 0.042
+version 0.046
 
 =head1 METHODS
 

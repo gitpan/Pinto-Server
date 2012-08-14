@@ -2,7 +2,7 @@ NAME
     Pinto::Server - Web interface to a Pinto repository
 
 VERSION
-    version 0.042
+    version 0.046
 
 ATTRIBUTES
   root
@@ -22,6 +22,14 @@ ATTRIBUTES
   default_port
     Returns the default port number that the server will listen on. This is
     a class attribute.
+
+METHODS
+  to_app()
+    Returns the application as a subroutine reference.
+
+  call( $env )
+    Invokes the application with the specified environment. Returns a
+    PSGI-compatible response.
 
     There is nothing to see here.
 

@@ -4,6 +4,7 @@ package Pinto::Server::Responder::Action;
 
 use Moose;
 
+use Carp;
 use JSON;
 use IO::Pipe;
 use Try::Tiny;
@@ -14,6 +15,7 @@ use Path::Class;
 use Plack::Response;
 use Log::Dispatch::Handle;
 use IO::Handle::Util qw(io_from_getline);
+use POSIX qw(WNOHANG);
 
 use Pinto;
 use Pinto::Result;
@@ -21,7 +23,7 @@ use Pinto::Constants qw(:all);
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.042'; # VERSION
+our $VERSION = '0.046'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -32,7 +34,7 @@ extends qw(Pinto::Server::Responder);
 sub respond {
     my ($self) = @_;
 
-    # path_info always has a leading slash
+    # path_info always has a leading slash, e.g. /action/list
     my (undef, undef, $action_name) = split '/', $self->request->path_info;
 
     my %params      = %{ $self->request->parameters }; # Copying
@@ -59,7 +61,9 @@ sub _run_action {
     my $pipe = IO::Pipe->new;
 
     run_fork {
+
         child {
+
             my $writer = $pipe->writer;
             $action_args->{out} ||= $writer;
 
@@ -76,6 +80,7 @@ sub _run_action {
             exit $result->was_successful ? 0 : 1;
         }
         parent {
+
             my $child_pid = shift;
             my $reader    = $pipe->reader;
 
@@ -85,7 +90,6 @@ sub _run_action {
 
             my $getline   = sub { local $/ = "\n"; $reader->getline };
             my $io_handle = io_from_getline( $getline );
-            my $headers   = ['Content-Type' => 'text/plain'];
 
             # If the parent looses the connection (usually because the
             # client at the other end was killed by Ctrl-C) then we
@@ -94,9 +98,15 @@ sub _run_action {
 
             $response  = sub {
                 my $responder = shift;
+                waitpid $child_pid, WNOHANG;
                 local $SIG{PIPE} = sub { kill 2, $child_pid };
+                my $headers = ['Content-Type' => 'text/plain'];
                 return $responder->( [200, $headers, $io_handle] );
             };
+        }
+        error {
+
+            croak "Failed to fork: $!";
         }
     };
 
@@ -153,7 +163,7 @@ Pinto::Server::Responder::Action - Responder for Actions
 
 =head1 VERSION
 
-version 0.042
+version 0.046
 
 =head1 AUTHOR
 

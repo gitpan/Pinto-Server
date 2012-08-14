@@ -14,8 +14,10 @@ lib/Pinto/Server/Responder/Action.pm
 lib/Pinto/Server/Responder/File.pm
 lib/Pinto/Server/Responder/Index.pm
 lib/Pinto/Server/Router.pm
+lib/Pinto/Server/Tester.pm
 perlcritic.ini
 t/00-compile.t
+t/00-report-prereqs.t
 t/01-functional.t
 t/02-authentication.t
 t/data/TestDist-1.0.tar.gz
