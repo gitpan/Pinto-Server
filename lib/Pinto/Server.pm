@@ -13,13 +13,14 @@ use Scalar::Util qw(blessed);
 use IO::Interactive qw(is_interactive);
 use Plack::Middleware::Auth::Basic;
 
+use Pinto 0.052;
 use Pinto::Types qw(Dir);
 use Pinto::Constants qw($PINTO_SERVER_DEFAULT_PORT);
 use Pinto::Server::Router;
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.049'; # VERSION
+our $VERSION = '0.50'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -111,7 +112,7 @@ Pinto::Server - Web interface to a Pinto repository
 
 =head1 VERSION
 
-version 0.049
+version 0.50
 
 =head1 ATTRIBUTES
 

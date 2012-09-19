@@ -12,7 +12,6 @@ lib/Pinto/Server.pm
 lib/Pinto/Server/Responder.pm
 lib/Pinto/Server/Responder/Action.pm
 lib/Pinto/Server/Responder/File.pm
-lib/Pinto/Server/Responder/Index.pm
 lib/Pinto/Server/Router.pm
 lib/Pinto/Server/Tester.pm
 perlcritic.ini

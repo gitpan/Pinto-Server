@@ -28,7 +28,7 @@ my %module_build_args = (
     "Jeffrey Ryan Thalhammer <jeff\@imaginative-software.com>"
   ],
   "dist_name" => "Pinto-Server",
-  "dist_version" => "0.049",
+  "dist_version" => "0.50",
   "license" => "perl",
   "module_name" => "Pinto::Server",
   "recommends" => {},
@@ -53,7 +53,7 @@ my %module_build_args = (
     "MooseX::Types::Moose" => 0,
     "POSIX" => 0,
     "Path::Class" => 0,
-    "Pinto" => "0.046",
+    "Pinto" => "0.052",
     "Pinto::Constants" => 0,
     "Pinto::Result" => 0,
     "Pinto::Tester" => 0,

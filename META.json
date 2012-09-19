@@ -53,7 +53,7 @@
             "MooseX::Types::Moose" : "0",
             "POSIX" : "0",
             "Path::Class" : "0",
-            "Pinto" : "0.046",
+            "Pinto" : "0.052",
             "Pinto::Constants" : "0",
             "Pinto::Result" : "0",
             "Pinto::Tester" : "0",
@@ -93,31 +93,27 @@
    "provides" : {
       "Pinto::Server" : {
          "file" : "lib/Pinto/Server.pm",
-         "version" : "0.049"
+         "version" : "0.50"
       },
       "Pinto::Server::Responder" : {
          "file" : "lib/Pinto/Server/Responder.pm",
-         "version" : "0.049"
+         "version" : "0.50"
       },
       "Pinto::Server::Responder::Action" : {
          "file" : "lib/Pinto/Server/Responder/Action.pm",
-         "version" : "0.049"
+         "version" : "0.50"
       },
       "Pinto::Server::Responder::File" : {
          "file" : "lib/Pinto/Server/Responder/File.pm",
-         "version" : "0.049"
-      },
-      "Pinto::Server::Responder::Index" : {
-         "file" : "lib/Pinto/Server/Responder/Index.pm",
-         "version" : "0.049"
+         "version" : "0.50"
       },
       "Pinto::Server::Router" : {
          "file" : "lib/Pinto/Server/Router.pm",
-         "version" : "0.049"
+         "version" : "0.50"
       },
       "Pinto::Server::Tester" : {
          "file" : "lib/Pinto/Server/Tester.pm",
-         "version" : "0.049"
+         "version" : "0.50"
       }
    },
    "release_status" : "stable",
@@ -131,6 +127,6 @@
          "web" : "https://github.com/thaljef/Pinto-Server"
       }
    },
-   "version" : "0.049"
+   "version" : "0.50"
 }
 

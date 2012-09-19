@@ -10,7 +10,7 @@ use Router::Simple;
 
 #-------------------------------------------------------------------------------
 
-our $VERSION = '0.049'; # VERSION
+our $VERSION = '0.50'; # VERSION
 
 #-------------------------------------------------------------------------------
 
@@ -30,28 +30,7 @@ sub BUILD {
   $r->connect( '/action/{action}',
                {responder => 'Action'}, {method => 'POST'} );
 
-  # Route for index of the named stack
-  $r->connect( '/{stack}/modules/02packages.details.txt.gz',
-               {responder => 'Index' }, {method => 'GET' } );
-
-  # Route for index of the default (unamed) stack
-  $r->connect( '/modules/02packages.details.txt.gz',
-               {responder => 'File' }, {method => 'GET' } );
-
-  # Route for 03modlist.data.gz (same for all stacks)
-  $r->connect( '/{stack}/modules/03modlist.data.gz',
-               {responder => 'File' }, {method => 'GET' } );
-
-  # Route for 03modlist.data.gz (same for unamed stack)
-  $r->connect( '/modules/03modlist.data.gz',
-               {responder => 'File' }, {method => 'GET' } );
-
-  # Route for distributions on the named stack
-  $r->connect( '/{stack}/authors/*',
-               {responder => 'File'  }, {method => 'GET' } );
-
-  # Route for distributions on the default (unamed) stack
-  $r->connect( '/authors/*',
+  $r->connect( '/*',
                {responder => 'File'  }, {method => 'GET' } );
 
   return $self;
@@ -71,6 +50,13 @@ sub route {
 
     my $request   = Plack::Request->new($env);
     my $responder = $responder_class->new(request => $request, root => $root);
+
+    # HACK: Plack-1.02 calls URI::Escape::uri_escape() with arguments
+    # that inadvertently cause $_ to be compiled into a regex.  This
+    # will emit warning if $_ is undef, or may blow up if it contains
+    # certains stuff.  To avoid this, just make sure $_ is empty for
+    # now.  A patch has been sent to Miyagawa.
+    local $_ = '';
 
     return $responder->respond;
 };
@@ -95,7 +81,7 @@ Pinto::Server::Router - Routes server requests
 
 =head1 VERSION
 
-version 0.049
+version 0.50
 
 =head1 METHODS
 
